@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <script src="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.js"></script>
+  <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.5.2/firebaseui.css" />
+</head>
+
+<body>
+  <% if(isLogined){ %>
+  <h1>title: </h1>
+  <h1><%= title %></h1>
+  <h1>Here is Homepage</h1>
+  <h1>NAME: </h1>
+  <h1><%= name %></h1>
+  <h1>USERID: </h1>
+  <h1><%= userID %></h1>
+  <h1>TOKENID: </h1>
+  <h1><%= tokenID %></h1>
+  <button id="btn-logout" class="dropdown-item">Logout</button>
+  <%} else {%>
+  <h1><%= title %></h1>
+  <p>Welcome to <%= title %></p>
+
+  <form>
+    <div class="form-group">
+      <label for="email">EMAIL: </label>
+      <input type="email" name="email" class="form-control" id="InputEmail" aria-describedby="emailHelp"
+        placeholder="Enter Email">
+    </div>
+    <div class="form-group">
+      <label for="Password">Password</label>
+      <input type="password" name="password" class="form-control" id="InputPass" placeholder="Enter Password">
+    </div>
+    <button type="button" onclick={signInWithEmail()} id="btn-signin">Login</button>
+    <button type="button" onclick={singUpWithEmail()} id="btn-signUp">Sign Up</button>
+  </form>
+  <button type="button" onclick={signInWithGoogle()}>
+    Sign In With Google
+  </button>
+  <button type="button" onclick={signInWithFacebook()}>
+    Sign In With Facebook
+  </button>
+  <%}%>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+
+  <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+  <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/6.4.0/firebase-app.js"></script>
+
+  <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/6.4.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.4.0/firebase-firestore.js"></script>
+
+  <script>
+    // TODO: Replace the following with your app's Firebase project configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyAfKjEDn3F_1kyMeqbXdax0KaETXEXyo8k",
+      authDomain: "javascript-example-1993.firebaseapp.com",
+      databaseURL: "https://javascript-example-1993.firebaseio.com",
+      projectId: "javascript-example-1993",
+      storageBucket: "",
+      messagingSenderId: "1092092685468",
+      appId: "1:1092092685468:web:408dd1e9aa031fee"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+  </script>
+
+  <script>
+    function signInWithGoogle() {
+
+      // Using a popup.
+      var provider = new firebase.auth.GoogleAuthProvider();
+      provider.addScope('profile');
+      provider.addScope('email');
+      firebase.auth().signInWithPopup(provider).then(function (result) {
+        // console.log(result);
+        // This gives you a Google Access Token.
+        var token = result.credential.accessToken;
+        // The signed-in user info.
+        var user = result.user;
+
+        firebase.auth().currentUser.getIdToken(true).then(function (idToken) {
+          // Send token to your backend via HTTPS
+          $.ajax({
+            url: '/home',
+            type: 'POST',
+            data: {
+              ids: idToken
+            },
+            success: function (data) {
+              location.reload();
+            }
+          });
+          console.log("IDTOKEN: ", idToken);
+        }).catch(function (error) {
+          // Handle error
+          console.log(error);
+        });
+
+      });
+
+    }
+
+    function signInWithFacebook() {
+
+      // Sign in using a popup.
+      var provider = new firebase.auth.FacebookAuthProvider();
+      provider.addScope('email');
+      provider.addScope('user_birthday');
+      firebase.auth().signInWithPopup(provider).then(function (result) {
+        // console.log(result); //This is Object
+        // This gives you a Facebook Access Token.
+        var token = result.credential.accessToken;
+        // The signed-in user info.
+        var user = result.user;
+
+        firebase.auth().currentUser.getIdToken(true).then(function (idToken) {
+          // Send token to your backend via HTTPS
+          $.ajax({
+            url: '/home',
+            type: 'POST',
+            data: {
+              ids: idToken
+            },
+            success: function (data) {
+              location.reload();
+            }
+          });
+          console.log("idtoken: ", idToken);
+        }).catch(function (error) {
+          // Handle error
+          console.log(error);
+        });
+
+      });
+
+    }
+
+    function signInWithEmail() {
+      var emails = $('#InputEmail').val();
+      var passwords = $('#InputPass').val();
+      firebase.auth().signInWithEmailAndPassword(emails, passwords).then(function (user) {
+        // console.log({ user });
+
+        firebase.auth().currentUser.getIdToken(true).then(function (idToken) {
+          // Send token to your backend via HTTPS
+          $.ajax({
+            url: '/home',
+            type: 'POST',
+            data: {
+              ids: idToken
+            },
+            success: function (data) {
+              location.reload();
+            }
+          });
+          console.log("idtoken: ", idToken);
+        }).catch(function (error) {
+          // Handle error
+          console.log(error);
+        });
+
+      }).catch(function (error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        if (errorCode === 'auth/wrong-password') {
+          alert('Wrong password.');
+        } else {
+          alert(errorMessage);
+        }
+        console.log(error);
+      });
+
+    }
+
+    function singUpWithEmail() {
+      var emails = $('#InputEmail').val();
+      var passwords = $('#InputPass').val();
+      firebase.auth().createUserWithEmailAndPassword(emails, passwords).then(function (user) {
+        console.log({ user });
+      }).catch(function (error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          if (errorCode == 'auth/weak-password') {
+            alert('The password is too weak.');
+          } else {
+            alert(errorMessage);
+          }
+          console.log(error);
+        });
+    }
+
+
+    //     { decodedToken:
+    //    { iss: 'https://securetoken.google.com/javascript-example-1993',
+    //      aud: 'javascript-example-1993',
+    //      auth_time: 1566287604,
+    //      user_id: 'X1Kf7pbi4pMt8rzd5wycnl2eoZ32',
+    //      sub: 'X1Kf7pbi4pMt8rzd5wycnl2eoZ32',
+    //      iat: 1566287605,
+    //      exp: 1566291205,
+    //      email: 'charles1993@yahoo.com',
+    //      email_verified: false,
+    //      firebase: { identities: [Object], sign_in_provider: 'password' },
+    //      uid: 'X1Kf7pbi4pMt8rzd5wycnl2eoZ32' } }
+    // { uid: 'X1Kf7pbi4pMt8rzd5wycnl2eoZ32' }
+
+    $(document).ready(function () {
+      console.log("ready!");
+
+      $('#InputEmail').val();
+      $('#InputPass').val();
+
+      $('#btn-signin').click(function () {
+
+      });
+
+      $('#btn-logout').click(function () {
+        firebase.auth().signOut().then(function () {
+          // Sign-out successful.
+
+          $.ajax({
+            url: '/logout',
+            type: 'GET',
+            success: function (result) {
+              location.reload();
+            }
+          });
+
+        }).catch(function (error) {
+          // An error happened.
+          console.log({ error });
+        });
+      });
+
+    });
+  </script>
+</body>
+
+</html>
