@@ -4,7 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var admin = require('firebase-admin');
-var serviceAccount = require('./serviceaccount.json')
+var serviceAccount = require('./serviceaccount.json') //path to serviceAccount.json file
 
 // var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -13,14 +13,11 @@ var app = express();
 
 var firebase = admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  // databaseURL: "https://javascript-example-1993.firebaseio.com",
-  apiKey: "AIzaSyAfKjEDn3F_1kyMeqbXdax0KaETXEXyo8k",
-  authDomain: "javascript-example-1993.firebaseapp.com",
-  databaseURL: "https://javascript-example-1993.firebaseio.com",
-  projectId: "javascript-example-1993",
-  storageBucket: "",
-  messagingSenderId: "1092092685468",
-  appId: "1:1092092685468:web:408dd1e9aa031fee"
+  apiKey: "<API-KEY>",
+  authDomain: "<Project-ID>.firebaseapp.com",
+  databaseURL: "https://<Project-ID>.firebaseio.com",
+  projectId: "<Project-ID>",
+  storageBucket: ""
 });
 
 // view engine setup
