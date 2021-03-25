@@ -1,18 +1,29 @@
-var passport = require('passport')
-var FacebookStrategy = require('passport-facebook').Strategy;
-var User = require('../models/User');
+const passport = require("passport");
+const FacebookStrategy = require("passport-facebook").Strategy;
+const User = require("../models/User");
+const config = require("../config/config");
+const { IP, PORT, FB_CLIENT_ID, FB_CLIENT_SECRET } = config;
 
-passport.use(new FacebookStrategy({
-    clientID: "159030901322260",
-    clientSecret: "0d641e47f5d55af221ec80346f3f2d43",
-    callbackURL: "http://127.0.0.1:3000/auth/facebook/callback"
-},
+passport.use(
+  new FacebookStrategy(
+    {
+      clientID: `${FB_CLIENT_ID}`,
+      clientSecret: `${FB_CLIENT_SECRET}`,
+      callbackURL: `http://${IP}:${PORT}/auth/facebook/callback`,
+    },
     function (accessToken, refreshToken, profile, done) {
-        User.findOrCreate({ name: profile.displayName }, { name: profile.displayName, userid: profile.id }, function (err, user) {
-            if (err) { return done(err); }
-            done(null, user);
-        });
+      User.findOrCreate(
+        { name: profile.displayName },
+        { name: profile.displayName, userid: profile.id },
+        function (err, user) {
+          if (err) {
+            return done(err);
+          }
+          done(null, user);
+        }
+      );
     }
-));
+  )
+);
 
 module.exports = passport;

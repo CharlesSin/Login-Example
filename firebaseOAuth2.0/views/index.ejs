@@ -59,11 +59,11 @@
   <script>
     // TODO: Replace the following with your app's Firebase project configuration
     var firebaseConfig = {
-      apiKey: "AIzaSyAfKjEDn3F_1kyMeqbXdax0KaETXEXyo8k",
-      authDomain: "javascript-example-1993.firebaseapp.com",
-      databaseURL: "https://javascript-example-1993.firebaseio.com",
-      projectId: "javascript-example-1993",
-      storageBucket: ""
+      apiKey: "<API-KEY>",
+      authDomain: "<Project-ID>.firebaseapp.com",
+      databaseURL: "https://<Project-ID>.firebaseio.com",
+      projectId: "<Project-ID>",
+      storageBucket: ""  
     };
 
     // Initialize Firebase
@@ -96,7 +96,6 @@
               location.reload();
             }
           });
-          console.log("IDTOKEN: ", idToken);
         }).catch(function (error) {
           // Handle error
           console.log(error);
@@ -107,13 +106,11 @@
     }
 
     function signInWithFacebook() {
-
       // Sign in using a popup.
       var provider = new firebase.auth.FacebookAuthProvider();
       provider.addScope('email');
       provider.addScope('user_birthday');
       firebase.auth().signInWithPopup(provider).then(function (result) {
-        // console.log(result); //This is Object
         // This gives you a Facebook Access Token.
         var token = result.credential.accessToken;
         // The signed-in user info.
@@ -131,7 +128,6 @@
               location.reload();
             }
           });
-          console.log("idtoken: ", idToken);
         }).catch(function (error) {
           // Handle error
           console.log(error);
@@ -145,7 +141,6 @@
       var emails = $('#InputEmail').val();
       var passwords = $('#InputPass').val();
       firebase.auth().signInWithEmailAndPassword(emails, passwords).then(function (user) {
-        // console.log({ user });
 
         firebase.auth().currentUser.getIdToken(true).then(function (idToken) {
           // Send token to your backend via HTTPS
@@ -159,7 +154,6 @@
               location.reload();
             }
           });
-          console.log("idtoken: ", idToken);
         }).catch(function (error) {
           // Handle error
           console.log(error);
@@ -197,30 +191,13 @@
         });
     }
 
-
-    //     { decodedToken:
-    //    { iss: 'https://securetoken.google.com/javascript-example-1993',
-    //      aud: 'javascript-example-1993',
-    //      auth_time: 1566287604,
-    //      user_id: 'X1Kf7pbi4pMt8rzd5wycnl2eoZ32',
-    //      sub: 'X1Kf7pbi4pMt8rzd5wycnl2eoZ32',
-    //      iat: 1566287605,
-    //      exp: 1566291205,
-    //      email: 'charles1993@yahoo.com',
-    //      email_verified: false,
-    //      firebase: { identities: [Object], sign_in_provider: 'password' },
-    //      uid: 'X1Kf7pbi4pMt8rzd5wycnl2eoZ32' } }
-    // { uid: 'X1Kf7pbi4pMt8rzd5wycnl2eoZ32' }
-
     $(document).ready(function () {
       console.log("ready!");
 
       $('#InputEmail').val();
       $('#InputPass').val();
 
-      $('#btn-signin').click(function () {
-
-      });
+      $('#btn-signin').click(function () {});
 
       $('#btn-logout').click(function () {
         firebase.auth().signOut().then(function () {

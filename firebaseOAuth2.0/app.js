@@ -78,13 +78,11 @@ function isAuthenticated(req, res, next) {
   // with a message saying : 'login!'
 
   var idToken = req.body.ids;
-  // console.log({ idToken });
   // idToken comes from the client app
   firebase.auth().verifyIdToken(idToken)
     .then(function (decodedToken) {
       console.log({ decodedToken });
       let uid = decodedToken.uid;
-      // ...
       console.log({ uid });
       if (uid) {
         req

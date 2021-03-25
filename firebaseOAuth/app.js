@@ -1,12 +1,12 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var passport = require('passport');
-var session = require('express-session');
-var mongoose = require('mongoose');
-var auth = require('./routes/auth');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const passport = require('passport');
+const session = require('express-session');
+const mongoose = require('mongoose');
+const auth = require('./routes/auth');
 
 mongoose.Promise = global.Promise;
 
@@ -15,19 +15,19 @@ mongoose.connect('mongodb://localhost:27017/mean-social', { useMongoClient: true
   .catch((err) => console.error(err));
 // Firebase App (the core Firebase SDK) is always required and
 // must be listed before other Firebase SDKs
-var firebase = require("firebase/app");
+const firebase = require("firebase/app");
 
 // Add the Firebase products that you want to use
 require("firebase/auth");
 require("firebase/firestore");
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
 
-var app = express();
+const app = express();
 
 // TODO: Replace the following with your app's Firebase project configuration
-var firebaseConfig = {
+const firebaseConfig = {
   apiKey: "AIzaSyAfKjEDn3F_1kyMeqbXdax0KaETXEXyo8k",
   authDomain: "javascript-example-1993.firebaseapp.com",
   databaseURL: "https://javascript-example-1993.firebaseio.com",

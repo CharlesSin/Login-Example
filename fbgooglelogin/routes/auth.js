@@ -1,7 +1,7 @@
-var express = require('express');
-var router = express.Router();
-var passportFacebook = require('../auth/facebook');
-var passportGoogle = require('../auth/google');
+const express = require('express');
+const router = express.Router();
+const passportFacebook = require('../auth/facebook');
+const passportGoogle = require('../auth/google');
 
 /* FACEBOOK ROUTER */
 router.get('/facebook',
